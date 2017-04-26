@@ -8,17 +8,41 @@
 
 import UIKit
 
+protocol NameControllerDelegate: class {
+    func nameController(nameVC: NameController, didSaveName name: String)
+}
+
 class NameController: UIViewController {
 
+    @IBOutlet weak var firstNameTextField: UITextField!
+    @IBOutlet weak var lastNameTextField: UITextField!
+    
+    weak var delegate: NameControllerDelegate?
+    var fullName: String?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        self.navigationItem.title = "Name"
+        addRighBarButton()
+        if let fullName = self.fullName {
+            let firstLast = fullName.components(separatedBy: " ")
+            firstNameTextField.text = firstLast[0]
+            lastNameTextField.text = firstLast[1]
+        }
+    }
+    
+    func addRighBarButton() {
+        let save = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(NameController.saveButtonTapped))
+        self.navigationItem.rightBarButtonItem = save
+    }    
+    
+    func saveButtonTapped() {
+        let name = firstNameTextField.text! + " " + lastNameTextField.text!
+        delegate?.nameController(nameVC: self, didSaveName: name)
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
 
