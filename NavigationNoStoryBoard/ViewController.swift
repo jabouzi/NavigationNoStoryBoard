@@ -29,6 +29,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         view.addSubview(tableView)
         self.navigationItem.title = "Main"
         changeLeftBarButton()
+        addRighBarButton()
     }
 
     override func didReceiveMemoryWarning() {
@@ -58,12 +59,26 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         if let indexPath = selectedIndexPath {
             names[indexPath.row] = name
             tableView.reloadRows(at: [indexPath], with: .automatic)
+        } else {
+            names.append(name)
+            tableView.reloadData()
         }
         self.navigationController?.popViewController(animated: true)
     }
     
+    func addRighBarButton() {
+        let save = UIBarButtonItem(title: "Add", style: .plain, target: self, action: #selector(ViewController.addNewUser))
+        self.navigationItem.rightBarButtonItem = save
+    }
+    
     func changeLeftBarButton() {
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
+    }
+    
+    func addNewUser() {
+        let nameVC = NameController()
+        nameVC.delegate = self
+        self.navigationController?.pushViewController(nameVC, animated: true)
     }
 
 
